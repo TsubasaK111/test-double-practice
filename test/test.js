@@ -5,19 +5,43 @@ const fs = require("fs");
 
 describe("Ghibliator", () => {
   describe("getAverageAge", () => {
-    it("should call fs.readFileSync", () => {
-      const readFileSyncSpy = sinon.spy(fs, "readFileSync");
-      const actual = new Ghibliator().getAverageAge();
-      readFileSyncSpy.restore();
-      sinon.assert.calledOnce(readFileSyncSpy);
+    let ghibliator;
+    let readFileSync;
+
+    beforeEach(() => {
+      ghibliator = new Ghibliator();
+      readFileSync = sinon.stub(fs, "readFileSync").callsFake(() => {
+        return `[{ "age": "17" }, { "age": "late teens" }]`;
+      });
     });
+
+    afterEach(() => {
+      readFileSync.restore();
+    });
+
+    it("should return a number", () => {
+      const actual = ghibliator.getAverageAge();
+
+      expect(actual).to.be.a("number");
+    });
+
+    it("should call fs.readFileSync", () => {
+      ghibliator.getAverageAge();
+      sinon.assert.calledOnce(readFileSync);
+    });
+
+    it("should call readFileSync with correct arguments", () => {
+      ghibliator.getAverageAge();
+      sinon.assert.calledWith(readFileSync, "./data.json", "utf-8");
+    });
+
     it("should return average age of characters", () => {
       // setup
       const expected = 33;
       const delta = 1;
 
       // exercise
-      const actual = new Ghibliator().getAverageAge();
+      const actual = ghibliator.getAverageAge();
 
       // assert
       expect(actual).closeTo(actual, expected, delta);
