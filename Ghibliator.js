@@ -18,6 +18,7 @@ class Ghibliator {
     const people = JSON.parse(text);
     const result = people.filter((person) => person.name === name)[0].films
       .length;
+    console.log(result);
     return result;
   }
 }

@@ -50,6 +50,11 @@ describe("Ghibliator", () => {
     });
   });
   describe("appearances", () => {
+    it("should return a number", () => {
+      const actual = new Ghibliator().appearances();
+      expect(actual).to.be.a("number");
+    });
+
     it("should return appearances", () => {
       // setup
       const expected = 2;
